@@ -14,11 +14,11 @@ In this section the requirements for the simulation will be expressed.
 
 - Humidity
 - Temperature
-- Windflow
+- Airflow
 - Soil PH
-- Soil Moisture 
+- Soil Moisture
 
 ### Techstack
 
-- Language: C++
+- Language: CPP
 - 2D Graphics Engine: SFML
