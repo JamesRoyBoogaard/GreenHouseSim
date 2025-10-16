@@ -3,7 +3,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(1400, 850), "The Simulattttionnnn");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
