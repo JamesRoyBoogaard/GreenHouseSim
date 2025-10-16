@@ -6,8 +6,8 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(1400, 850), "The Simulation");
 
-    sf::RectangleShape background(sf::Vector2f(1400.f, 500.f));
-    sf::RectangleShape garden(sf::Vector2f(800.f, 300.f));
+    sf::RectangleShape background(sf::Vector2f(1400, 500));
+    sf::RectangleShape garden(sf::Vector2f(800, 300));
 
     std::vector<sf::Sprite> plants;
 
@@ -35,15 +35,18 @@ int main()
     float top_row[2] = {385.f,188.f};
     float bottom_row[2] = {435.f,288.f};
 
-    for(int i = 0; i<12; i++){
+    for(int i = 0; i < 12; i++){
+
         sf::Sprite plant;
         plant.setTexture(plantTexture);
         plant.setScale(0.2,0.2);
+
         if(i%2){
             plant.setPosition(top_row[0] + i*50, top_row[1]);
         }else{
             plant.setPosition(bottom_row[0] + i*50, bottom_row[1]);
         }
+
         plants.push_back(plant);
     }
 
@@ -55,6 +58,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
