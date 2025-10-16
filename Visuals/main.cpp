@@ -4,13 +4,16 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1400, 850), "The Simulation");
-    sf::RectangleShape background(sf::Vector2f(1300.f, 500.f));
-    sf::Sprite plant;
+
+    sf::RectangleShape background(sf::Vector2f(1400.f, 500.f));
+    sf::RectangleShape greenhouse(sf::Vector2f(800.f, 300.f));
+
+    std::vector<sf::Sprite> plants;
     sf::Sprite soil;
 
     sf::Texture grassTexture;
     sf::Texture plantTexture;
-    sf::Texture soilTexture;
+    //sf::Texture soilTexture;
 
     if (!grassTexture.loadFromFile("../Textures/grass.png", sf::IntRect(0, 0, 1400, 850)))
     {
@@ -20,17 +23,40 @@ int main()
     {
 
     }
-    if (!plantTexture.loadFromFile("../Textures/dirt.png"))
-    {
+    // if (!soilTexture.loadFromFile("../Textures/dirt.png"))
+    // {
 
-    }
+    // }
 
 
     background.setTexture(&grassTexture);
-    background.setOutlineThickness(10.f);
-    background.setOutlineColor(sf::Color(192, 192, 192)); // steel-like gray  
-    background.setPosition(10.f,10.f);  
-    plant.setTexture(plantTexture);
+    background.setPosition(0.f,0.f); 
+
+    greenhouse.setFillColor(sf::Color(192, 192, 192));    
+    greenhouse.setOutlineThickness(10.f);
+    greenhouse.setOutlineColor(sf::Color(200, 200, 200)); 
+    greenhouse.setPosition(300.f, 110.f);
+
+
+    float top_row[2] = {50.f,50.f};
+
+    float bottom_row[2] = {100.f,400.f};
+
+    for(int i = 0; i<12; i++){
+        sf::Sprite plant;
+        plant.setTexture(plantTexture);
+        plant.setScale(0.2,0.2);
+        if(i%2){
+            plant.setPosition(top_row[0] + i*50, top_row[1] );
+        }else{
+            plant.setPosition(bottom_row[0] + i*50, bottom_row[1]);
+        }
+        plants.push_back(plant);
+    }
+
+
+    // soil.setTexture(soilTexture);
+    // soil.setPosition(200.f, 100.f);
 
     while (window.isOpen())
     {
@@ -43,7 +69,11 @@ int main()
 
         window.clear();
         window.draw(background);
-        window.draw(plant);
+        window.draw(greenhouse);
+        //window.draw(soil);
+        for(sf::Sprite plant: plants){
+            window.draw(plant);
+        }
         window.display();
     }
 
