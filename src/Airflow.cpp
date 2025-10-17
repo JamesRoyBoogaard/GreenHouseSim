@@ -4,22 +4,38 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+void Move_Directional_line();
+void Create_Offshoot_line();
+void Handle_line_Collision();
+float Deminish_Velocity(Line line);
 
-struct Origin{
+struct Origin
+{
     int fan_rate;
     sf::Vector2f postion;
 };
 
-struct Oulet{
+struct Oulet
+{
     float reach;
     float strength; 
     sf::Vector2f position;
 };
 
-struct Directinal_line{
+struct Line
+{
+    float velocity;
+    sf::Vector2f position;
+    float rate_of_slowing;
 
 };
 
-struct Offshoot{
-
+struct Directional_line: public Line
+{
+    
 };
+
+struct Offshoot_line: public Line{ 
+    float tightness_of_curve;
+};
+
