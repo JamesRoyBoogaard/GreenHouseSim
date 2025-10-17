@@ -1,54 +1,12 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <Greenhouse.hpp>
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1400, 850), "The Simulation");
-
-    sf::RectangleShape background(sf::Vector2f(1400, 500));
-    sf::RectangleShape greenhouse(sf::Vector2f(800, 300));
-
-    std::vector<sf::Sprite> plants;
-
-    sf::Texture grassTexture;
-    sf::Texture plantTexture;
-
-    if (!grassTexture.loadFromFile("../Textures/grass.png", sf::IntRect(0, 0, 1400, 850)))
-    {
-        
-    }
-    if (!plantTexture.loadFromFile("../Textures/plant_no_bg.png"))
-    {
-
-    }
-
-    background.setTexture(&grassTexture);
-    background.setPosition(0.f,0.f); 
-
-    greenhouse.setFillColor(sf::Color(192, 192, 192));    
-    greenhouse.setOutlineThickness(10.f);
-    greenhouse.setOutlineColor(sf::Color(200, 200, 200)); 
-    greenhouse.setPosition(300.f, 110.f);
-
-
-    float top_row[2] = {385.f,188.f};
-    float bottom_row[2] = {435.f,288.f};
-
-    for(int i = 0; i < 12; i++){
-
-        sf::Sprite plant;
-        plant.setTexture(plantTexture);
-        plant.setScale(0.2,0.2);
-
-        if(i%2){
-            plant.setPosition(top_row[0] + i*50, top_row[1]);
-        }else{
-            plant.setPosition(bottom_row[0] + i*50, bottom_row[1]);
-        }
-
-        plants.push_back(plant);
-    }
+    Greenhouse greenhouse;
 
     while (window.isOpen())
     {
@@ -63,11 +21,7 @@ int main()
         std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
         window.clear();
-        window.draw(background);
-        window.draw(greenhouse);
-        for(sf::Sprite plant: plants){
-            window.draw(plant);
-        }
+        greenhouse.draw(window);
         window.display();
     }
 

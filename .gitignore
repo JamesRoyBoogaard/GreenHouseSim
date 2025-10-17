@@ -1,1 +1,54 @@
+# === Build artifacts ===
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/Makefile
+/*.cmake
+/install_manifest.txt
+/compile_commands.json
+/.ninja_deps
+/.ninja_log
+
+# === Executables ===
+/GreenhouseSim
+/*.exe
+/*.out
+/*.app
 *.exe
+
+# === Temporary files ===
+*.obj
+*.o
+*.a
+*.so
+*.dll
+*.dylib
+*.lib
+*.pdb
+
+# === Editor and OS files ===
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# === Logs ===
+*.log
+
+# === SFML Resources ===
+# (You usually keep textures, sounds, etc. under Textures/ or Resources/, so don’t ignore them)
+# Uncomment if you generate something temporary there:
+# /Textures/tmp/
+# /Resources/tmp/
+
+# === VSCode / CLion / IDE stuff ===
+.vscode/
+.idea/
+*.code-workspace
+*.user
+*.workspace
+*.project
+
+# === CMake presets (if using them) ===
+CMakeUserPresets.json
