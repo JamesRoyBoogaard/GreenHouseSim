@@ -1,13 +1,15 @@
-// Create points of intake and outtake for the air to travel from (standard ventilation)
-// The airflow needs a direction, current  position, size, speed
+
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-void Move_Directional_line();
-void Create_Offshoot_line();
+void Move_Directional_Line();
+void Create_Directional_Line(sf::Vector2f direction, sf::Vector2f initial_position); //Spawn a directional line that then travels in the target
+void Create_Offshoot_lines();
 void Handle_line_Collision();
 float Deminish_Velocity(Line line);
+
+void Create_Outlet_Lines(float reach, float strength, sf::Vector2f position);
 
 struct Origin
 {
@@ -35,7 +37,8 @@ struct Directional_line: public Line
     
 };
 
-struct Offshoot_line: public Line{ 
+struct Offshoot_line: public Line
+{ 
     float tightness_of_curve;
 };
 

@@ -7,7 +7,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1400, 850), "The Simulation");
 
     sf::RectangleShape background(sf::Vector2f(1400, 500));
-    sf::RectangleShape garden(sf::Vector2f(800, 300));
+    sf::RectangleShape greenhouse(sf::Vector2f(800, 300));
 
     std::vector<sf::Sprite> plants;
 
@@ -26,10 +26,10 @@ int main()
     background.setTexture(&grassTexture);
     background.setPosition(0.f,0.f); 
 
-    garden.setFillColor(sf::Color(192, 192, 192));    
-    garden.setOutlineThickness(10.f);
-    garden.setOutlineColor(sf::Color(200, 200, 200)); 
-    garden.setPosition(300.f, 110.f);
+    greenhouse.setFillColor(sf::Color(192, 192, 192));    
+    greenhouse.setOutlineThickness(10.f);
+    greenhouse.setOutlineColor(sf::Color(200, 200, 200)); 
+    greenhouse.setPosition(300.f, 110.f);
 
 
     float top_row[2] = {385.f,188.f};
@@ -64,7 +64,7 @@ int main()
 
         window.clear();
         window.draw(background);
-        window.draw(garden);
+        window.draw(greenhouse);
         for(sf::Sprite plant: plants){
             window.draw(plant);
         }
