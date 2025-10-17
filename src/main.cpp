@@ -62,7 +62,6 @@ int main()
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
-
         window.clear();
         window.draw(background);
         window.draw(garden);
