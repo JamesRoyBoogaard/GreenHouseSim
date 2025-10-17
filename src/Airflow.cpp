@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -30,8 +28,6 @@ struct Oulet
     float strength; 
     sf::Vector2f position;
 };
-
-
 
 struct Directional_line: public Line
 {
