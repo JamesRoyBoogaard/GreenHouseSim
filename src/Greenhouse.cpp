@@ -1,9 +1,12 @@
 #include "Greenhouse.hpp"
 #include <iostream>
+#include "Airflow.hpp"
 
 Greenhouse::Greenhouse() {
     background.setSize(sf::Vector2f(1400, 500));
     greenhouse.setSize(sf::Vector2f(800, 300));
+    upper_air_intake.setSize(sf::Vector2f(50,50));
+
 
     if (!grassTexture.loadFromFile("../Textures/grass.png", sf::IntRect(0, 0, 1400, 850))) {
         std::cerr << "Failed to load grass texture\n";
@@ -19,6 +22,10 @@ Greenhouse::Greenhouse() {
     greenhouse.setOutlineThickness(10.f);
     greenhouse.setOutlineColor(sf::Color(200, 200, 200));
     greenhouse.setPosition(300.f, 110.f);
+
+    upper_air_intake.setPosition(sf::Vector2f(1106, 164));
+    upper_air_intake.setFillColor(sf::Color(245, 245, 220));
+
 
     float top_row[2] = {385.f, 188.f};
     float bottom_row[2] = {435.f, 288.f};
@@ -46,4 +53,5 @@ void Greenhouse::draw(sf::RenderWindow& window) {
     window.draw(greenhouse);
     for (auto& plant : plants)
         window.draw(plant);
+    window.draw(upper_air_intake);
 }

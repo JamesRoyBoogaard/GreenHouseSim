@@ -11,6 +11,11 @@ public:
 private:
     sf::RectangleShape background;
     sf::RectangleShape greenhouse;
+    sf::RectangleShape upper_air_intake;
+    sf::RectangleShape upper_air_outlet;
+    sf::RectangleShape lower_air_intake;
+    sf::RectangleShape lower_air_outlet;
+
     std::vector<sf::Sprite> plants;
     sf::Texture grassTexture;
     sf::Texture plantTexture;
