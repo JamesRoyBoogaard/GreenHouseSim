@@ -13,10 +13,10 @@ class Airflow {
         
         struct Line
         {
-            sf::Vector2f velocity = {-.1f,0.f};
+            sf::Vector2f velocity ;
             sf::CircleShape dot;
             sf::Vector2f position;
-            float rate_of_slowing = 0.80f;
+            float rate_of_slowing = 0.99f;
 
         };
 
@@ -30,16 +30,15 @@ class Airflow {
                 Line::dot.setFillColor(sf::Color::Black);
                 Line::dot.setPosition(initial_position);
                 Line::position = initial_position;
+                Line::velocity = {-8.f,0.f};
                 trail.push_back(initial_position);
             }
 
             void Move(sf::RenderWindow& window)
             {
-                dot.move(velocity);
+                dot.move(Line::velocity*=rate_of_slowing);
                 sf::Vector2f position = dot.getPosition();
                 trail.push_back(position);
-
-                
                 std::vector<sf::Vertex> vert;
                 for (auto& p: trail){
                     if(trail.size()<=1000){
@@ -48,9 +47,10 @@ class Airflow {
                         trail.erase(trail.begin());
                     }
             }
-
-                window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
-                window.draw(dot);
+    
+            window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
+            window.draw(dot);
+                
             }
         };
 

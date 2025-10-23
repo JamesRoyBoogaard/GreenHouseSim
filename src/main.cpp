@@ -27,22 +27,20 @@ int main()
 
         auto now = std::chrono::steady_clock::now();
         auto time_elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - last_line);
-
-        
     
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
+        // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
         window.clear();
         greenhouse.draw(window);
         if(time_elapsed.count() >= 3){
-            std::cout<<"pen pineapple apple pen\n";
             lines.emplace_back(intake,window);
             last_line = now;
         }        
-        
         for(auto& line: lines){
-            line.Move(window);
+            if(line.velocity.x != 0.f || line.velocity.y != 0.f){
+                line.Move(window);
+            }
         }
         window.display();
     }
