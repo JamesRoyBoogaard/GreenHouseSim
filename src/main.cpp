@@ -15,8 +15,6 @@ int main()
     std::vector<Airflow::Offshoot_line> offshoot_lines;
     auto last_dl = std::chrono::steady_clock::now();
     auto last_ol = std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000));
-    auto last_gl = std::chrono::steady_clock::now();
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -28,9 +26,7 @@ int main()
 
         auto now = std::chrono::steady_clock::now();
         auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - last_dl);
-        auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::seconds>(now - last_ol);
-        auto time_elapsed_gl = std::chrono::duration_cast<std::chrono::seconds>(now - last_gl);
-    
+        auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::seconds>(now - last_ol);    
         // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
