@@ -29,7 +29,7 @@ class Airflow {
                 Line::dot.setFillColor(sf::Color::Black);
                 Line::dot.setPosition(initial_position);
                 Line::position = initial_position;
-                Line::velocity = {-8.f,0.f};
+                Line::velocity = {-8.f,0.f};// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
                 trail.push_back(initial_position);
             }
 
@@ -56,17 +56,17 @@ class Airflow {
             float tightness_of_curve;
             std::vector<sf::Vector2f> trail;
 
-            Offshoot_line(Directional_line dl, sf::RenderWindow window){
+            Offshoot_line(Directional_line dl, sf::RenderWindow& window){
                 float tightness_of_curve = 4.f;
                 Line::dot.setRadius(2.f);
                 auto& position = dl.dot.getPosition();
                 Line::dot.setPosition(position);
                 Line::dot.setFillColor(sf::Color::Green);
-                Line::velocity = {dl.velocity.x , dl.velocity.y+30};
+                Line::velocity = {dl.velocity.x , dl.velocity.y + 30};
                 trail.push_back(position);
             }
 
-            void Move_Spiral(sf::RenderWindow window){
+            void Move_Spiral(sf::RenderWindow& window){
                 dot.move(Line::velocity*=rate_of_slowing);
                 sf::Vector2f position = dot.getPosition();
                 trail.push_back(position);
