@@ -16,7 +16,7 @@ class Airflow {
             sf::Vector2f velocity ;
             sf::CircleShape dot;
             sf::Vector2f position;
-            float rate_of_slowing = 0.99f;
+            float rate_of_slowing = 0.95f;
         };
 
         struct Directional_line: public Line
@@ -56,13 +56,13 @@ class Airflow {
             float tightness_of_curve;
             std::vector<sf::Vector2f> trail;
 
-            Offshoot_line(Directional_line dl, sf::RenderWindow& window){
+            Offshoot_line(Directional_line dl, sf::RenderWindow& window, float y_offset){
                 float tightness_of_curve = 4.f;
                 Line::dot.setRadius(2.f);
                 auto& position = dl.dot.getPosition();
                 Line::dot.setPosition(position);
                 Line::dot.setFillColor(sf::Color::Green);
-                Line::velocity = {dl.velocity.x , dl.velocity.y + 30};
+                Line::velocity = {dl.velocity.x , dl.velocity.y + y_offset};
                 trail.push_back(position);
             }
 
