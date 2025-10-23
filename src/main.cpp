@@ -11,7 +11,7 @@ int main()
     Greenhouse greenhouse;
     Airflow airflow;
     sf::Vector2f intake = {1106, 185};
-    sf::Vector2f direction = {5,0};
+    sf::Vector2f direction = {5,0}; // for now hard coded but will be determined via culculation through an aircon struct later
     std::vector<Airflow::Directional_line> lines;
     auto last_line = std::chrono::steady_clock::now();
 
@@ -38,10 +38,10 @@ int main()
             last_line = now;
         }        
         for(auto& line: lines){
-            if(line.velocity.x != 0.f || line.velocity.y != 0.f){
-                line.Move(window);
-            }
+            line.Move(window);
         }
+        lines.erase(std::remove_if(lines.begin(), lines.end(), [](auto& line){ return std::abs(line.velocity.x) < 0.01f && std::abs(line.velocity.y) < 0.01f; }),
+        lines.end());
         window.display();
     }
 
