@@ -13,6 +13,7 @@ int main()
     sf::Vector2f intake = {1106, 185};
     sf::Vector2f direction = {5,0}; // for now hard coded but will be determined via culculation through an aircon struct later
     std::vector<Airflow::Directional_line> lines;
+    std::vector<Airflow::Offshoot_line> offshoot_lines;
     auto last_line = std::chrono::steady_clock::now();
 
 
