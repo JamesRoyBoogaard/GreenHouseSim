@@ -15,7 +15,7 @@ int main()
     std::vector<Airflow::Offshoot_line> offshoot_lines;
     auto last_dl = std::chrono::steady_clock::now();
     auto last_ol = std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000));
-
+    auto last_gl = std::chrono::steady_clock::now();
 
     while (window.isOpen())
     {
@@ -29,10 +29,14 @@ int main()
         auto now = std::chrono::steady_clock::now();
         auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - last_dl);
         auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::seconds>(now - last_ol);
+        auto time_elapsed_gl = std::chrono::duration_cast<std::chrono::seconds>(now - last_gl);
     
         // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
+
+        // Okay so we have a chrono::now when each particle is made and then move the particle a certain amount of pixels each millisecond. 
+        // The number of pixels each millisecond is then reduced by the slowing value appearing to slow the particle.
         window.clear();
         greenhouse.draw(window);
         if(time_elapsed_dl.count() >= 3){
@@ -42,7 +46,7 @@ int main()
 
         for(auto& line: lines){
             line.Move(window);
-            if(time_elapsed_ol.count()>= 1){
+            if(time_elapsed_ol.count() >= 1){
                 offshoot_lines.emplace_back(line,window,30);
                 offshoot_lines.emplace_back(line, window,-30);
                 last_ol = now;
@@ -54,11 +58,11 @@ int main()
         }
 
         lines.erase(std::remove_if(lines.begin(),lines.end(), [](auto& line) 
-            {return abs(line.velocity.x) < 0.01f && abs(line.velocity.y) < 0.01f;})
+            {return abs(line.velocity.x) < 0.1f && abs(line.velocity.y) < 0.1f;})
             ,lines.end());
 
         offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
-        {return abs(offshoot_line.velocity.x) < 0.01f && abs(offshoot_line.velocity.y) < 0.01f;}),
+        {return abs(offshoot_line.velocity.x) < 0.1f && abs(offshoot_line.velocity.y) < 0.1f;}),
         offshoot_lines.end());
 
         window.display();

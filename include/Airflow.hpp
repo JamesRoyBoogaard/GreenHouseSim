@@ -16,7 +16,7 @@ class Airflow {
             sf::Vector2f velocity ;
             sf::CircleShape dot;
             sf::Vector2f position;
-            float rate_of_slowing = 0.95f;
+            float rate_of_slowing = 0.98f;
         };
 
         struct Directional_line: public Line
