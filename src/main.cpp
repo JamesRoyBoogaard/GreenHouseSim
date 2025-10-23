@@ -40,8 +40,10 @@ int main()
         for(auto& line: lines){
             line.Move(window);
         }
-        lines.erase(std::remove_if(lines.begin(), lines.end(), [](auto& line){ return std::abs(line.velocity.x) < 0.01f && std::abs(line.velocity.y) < 0.01f; }),
-        lines.end());
+        lines.erase(std::remove_if(lines.begin(),lines.end(), 
+        [](auto& line) {return abs(line.velocity.x) < 0.01f && abs(line.velocity.y) < 0.01f;})
+        ,lines.end());
+
         window.display();
     }
 
