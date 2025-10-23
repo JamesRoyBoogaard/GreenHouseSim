@@ -39,10 +39,15 @@ class Airflow {
                 sf::Vector2f position = dot.getPosition();
                 trail.push_back(position);
 
+                
                 std::vector<sf::Vertex> vert;
                 for (auto& p: trail){
-                    vert.push_back(sf::Vertex(p,sf::Color::Black));
-                }
+                    if(trail.size()<=1000){
+                        vert.push_back(sf::Vertex(p,sf::Color::Black));
+                    }else{
+                        trail.erase(trail.begin());
+                    }
+            }
 
                 window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
                 window.draw(dot);
