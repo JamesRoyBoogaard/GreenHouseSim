@@ -36,13 +36,15 @@ int main()
         if(time_elapsed.count() >= 3){
             lines.emplace_back(intake,window);
             last_line = now;
-        }        
+        }   
+             
         for(auto& line: lines){
             line.Move(window);
         }
-        lines.erase(std::remove_if(lines.begin(),lines.end(), 
-        [](auto& line) {return abs(line.velocity.x) < 0.01f && abs(line.velocity.y) < 0.01f;})
-        ,lines.end());
+
+        lines.erase(std::remove_if(lines.begin(),lines.end(), [](auto& line) 
+            {return abs(line.velocity.x) < 0.01f && abs(line.velocity.y) < 0.01f;})
+            ,lines.end());
 
         window.display();
     }
