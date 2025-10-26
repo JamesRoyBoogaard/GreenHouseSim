@@ -58,6 +58,7 @@ class Airflow {
                     }
                 window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
                 window.draw(dot);
+                initial_time = std::chrono::steady_clock::now();
                 }
                 
             }
