@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
+#include <chrono>
 
 class Airflow {
     public:
@@ -21,7 +22,8 @@ class Airflow {
 
         struct Directional_line: public Line
         {
-            std::vector<sf::Vector2f> trail;        
+            std::vector<sf::Vector2f> trail;   
+            std::chrono::steady_clock::time_point initial_time;     
 
             Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window)
             {
@@ -31,23 +33,33 @@ class Airflow {
                 Line::position = initial_position;
                 Line::velocity = {-8.f,0.f};// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
                 trail.push_back(initial_position);
+                initial_time = std::chrono::steady_clock::now();
+
             }
 
             void Move(sf::RenderWindow& window)
             {
-                dot.move(Line::velocity*=rate_of_slowing);
-                sf::Vector2f position = dot.getPosition();
-                trail.push_back(position);
-                std::vector<sf::Vertex> vert;
-                for (auto& p: trail){
-                    if(trail.size()<=1000){
-                        vert.push_back(sf::Vertex(p,sf::Color::Black));
-                    }else{
-                        trail.erase(trail.begin());
+                auto current_time = std::chrono::steady_clock::now();
+                // current_time check against initial_time
+                auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
+
+
+                if(elapsed.count()>=1000){
+                    dot.move(Line::velocity*=rate_of_slowing);
+                    sf::Vector2f position = dot.getPosition();
+                    trail.push_back(position);
+                    std::vector<sf::Vertex> vert;
+                    for (auto& p: trail){
+                        if(trail.size()<=1000){
+                            vert.push_back(sf::Vertex(p,sf::Color::Black));
+                        }else{
+                            trail.erase(trail.begin());
+                        }
+                    }
+                window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
+                window.draw(dot);
                 }
-            }
-            window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
-            window.draw(dot);
+                
             }
         };
 
