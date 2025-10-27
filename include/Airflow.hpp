@@ -42,24 +42,24 @@ class Airflow {
                 auto current_time = std::chrono::steady_clock::now();
                 // current_time check against initial_time
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
+                std::vector<sf::Vertex> vert;
 
 
-                if(elapsed.count()>=1000){
+                if(elapsed.count()>=10){
                     dot.move(Line::velocity*=rate_of_slowing);
                     sf::Vector2f position = dot.getPosition();
                     trail.push_back(position);
-                    std::vector<sf::Vertex> vert;
                     for (auto& p: trail){
-                        if(trail.size()<=1000){
+                        if(trail.size()<=10){
                             vert.push_back(sf::Vertex(p,sf::Color::Black));
                         }else{
                             trail.erase(trail.begin());
                         }
                     }
-                window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
-                window.draw(dot);
                 initial_time = std::chrono::steady_clock::now();
                 }
+                window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
+                window.draw(dot);
                 
             }
         };
