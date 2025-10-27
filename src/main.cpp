@@ -42,7 +42,7 @@ int main()
 
         for(auto& line: lines){
             line.Move(window);
-            if(time_elapsed_ol.count() >= 1){
+            if(time_elapsed_ol.count() >= 250){
                 offshoot_lines.emplace_back(line,window,30);
                 offshoot_lines.emplace_back(line, window,-30);
                 last_ol = now;
