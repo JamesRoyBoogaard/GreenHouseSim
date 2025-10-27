@@ -33,7 +33,7 @@ class Airflow {
                 Line::dot.setPosition(initial_position);
                 Line::position = initial_position;
                 Line::velocity = {-8.f,0.f};// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
-                trail.emplace_back(initial_position,sf::Color::Black);
+                trail.emplace_back(initial_position, sf::Color::Black);
                 initial_time = std::chrono::steady_clock::now();
 
             }
@@ -47,7 +47,7 @@ class Airflow {
                     dot.move(Line::velocity*=rate_of_slowing);
                     sf::Vector2f position = dot.getPosition();
                     initial_time = std::chrono::steady_clock::now();
-                    trail.emplace_back(position,sf::Color::Black);
+                    trail.emplace_back(position, sf::Color::Black);
                 }
 
                 if(trail.size()>=20){
