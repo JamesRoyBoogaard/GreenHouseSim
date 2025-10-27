@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 
+
 class Airflow {
     public:
         Airflow();
@@ -22,17 +23,17 @@ class Airflow {
 
         struct Directional_line: public Line
         {
-            std::vector<sf::Vector2f> trail;   
+            std::vector<sf::Vertex> trail;   
             std::chrono::steady_clock::time_point initial_time;     
 
-            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window)
+            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window)//add param for initial velocity from the aircon
             {
                 Line::dot.setRadius(2.f);
                 Line::dot.setFillColor(sf::Color::Black);
                 Line::dot.setPosition(initial_position);
                 Line::position = initial_position;
                 Line::velocity = {-8.f,0.f};// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
-                trail.push_back(initial_position);
+                trail.emplace_back(initial_position,sf::Color::Black);
                 initial_time = std::chrono::steady_clock::now();
 
             }
@@ -40,27 +41,21 @@ class Airflow {
             void Move(sf::RenderWindow& window)
             {
                 auto current_time = std::chrono::steady_clock::now();
-                // current_time check against initial_time
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
-                std::vector<sf::Vertex> vert;
-
 
                 if(elapsed.count()>=10){
                     dot.move(Line::velocity*=rate_of_slowing);
                     sf::Vector2f position = dot.getPosition();
-                    trail.push_back(position);
-                    for (auto& p: trail){
-                        if(trail.size()<=10){
-                            vert.push_back(sf::Vertex(p,sf::Color::Black));
-                        }else{
-                            trail.erase(trail.begin());
-                        }
-                    }
-                initial_time = std::chrono::steady_clock::now();
+                    initial_time = std::chrono::steady_clock::now();
+                    trail.emplace_back(position,sf::Color::Black);
                 }
-                window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
+
+                if(trail.size()>=20){
+                    trail.erase(trail.begin());
+                }
+                 
+                window.draw(trail.data(),trail.size(), sf::PrimitiveType::LineStrip);
                 window.draw(dot);
-                
             }
         };
 

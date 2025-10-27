@@ -26,7 +26,7 @@ int main()
 
         auto now = std::chrono::steady_clock::now();
         auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - last_dl);
-        auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::seconds>(now - last_ol);    
+        auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_ol);    
         // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
