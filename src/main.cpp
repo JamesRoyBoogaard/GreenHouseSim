@@ -31,12 +31,10 @@ int main()
         // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
-        // Okay so we have a chrono::now when each particle is made and then move the particle a certain amount of pixels each millisecond. 
-        // The number of pixels each millisecond is then reduced by the slowing value appearing to slow the particle.
         window.clear();
         greenhouse.draw(window);
         if(time_elapsed_dl.count() >= 3){
-            lines.emplace_back(intake,window,velocity); // each of these lines then need to have a spiral spawn out on each side every second.
+            lines.emplace_back(intake,window,velocity); 
             last_dl = now;
         }
 
