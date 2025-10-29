@@ -13,6 +13,7 @@ int main()
     sf::Vector2f intake = {1106, 185};
     std::vector<Airflow::Directional_line> lines;
     std::vector<Airflow::Offshoot_line> offshoot_lines;
+    sf::Vector2f velocity = {-8,0};
     auto last_dl = std::chrono::steady_clock::now();
     auto last_ol = std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000));
     while (window.isOpen())
@@ -30,13 +31,12 @@ int main()
         // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
-
         // Okay so we have a chrono::now when each particle is made and then move the particle a certain amount of pixels each millisecond. 
         // The number of pixels each millisecond is then reduced by the slowing value appearing to slow the particle.
         window.clear();
         greenhouse.draw(window);
         if(time_elapsed_dl.count() >= 3){
-            lines.emplace_back(intake,window); // each of these lines then need to have a spiral spawn out on each side every second.
+            lines.emplace_back(intake,window,velocity); // each of these lines then need to have a spiral spawn out on each side every second.
             last_dl = now;
         }
 

@@ -18,7 +18,7 @@ class Airflow {
             sf::Vector2f velocity ;
             sf::CircleShape dot;
             sf::Vector2f position;
-            float rate_of_slowing = 0.98f;
+            float rate_of_slowing = 0.99f;
         };
 
         struct Directional_line: public Line
@@ -26,16 +26,15 @@ class Airflow {
             std::vector<sf::Vertex> trail;   
             std::chrono::steady_clock::time_point initial_time;     
 
-            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window)//add param for initial velocity from the aircon
+            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)//add param for initial velocity from the aircon
             {
                 Line::dot.setRadius(2.f);
                 Line::dot.setFillColor(sf::Color::Black);
                 Line::dot.setPosition(initial_position);
                 Line::position = initial_position;
-                Line::velocity = {-8.f,0.f};// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
+                Line::velocity = p_velocity;// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
                 trail.emplace_back(initial_position, sf::Color::Black);
                 initial_time = std::chrono::steady_clock::now();
-
             }
 
             void Move(sf::RenderWindow& window)
