@@ -1,6 +1,5 @@
 #include "Aircon.hpp"
 
-
 Aircon::Aircon(sf::Vector2f position,
                sf::Vector2f p_direction,
                float p_speed)
@@ -20,14 +19,15 @@ void Aircon::draw(){
     
 };
 
-void Aircon::airflow(sf::RenderWindow& p_window, auto p_last_dl, auto last_ol){
+void Aircon::airflow(sf::RenderWindow& p_window, auto p_last_dl, auto p_last_ol){
     // work out direction and then add speed to the 2dvector direction to form the velocity 
     
+    bool line_produced = false;
     sf::Vector2f velocity = {direction.x*speed, direction.y*speed};
 
     auto now = std::chrono::steady_clock::now();
-    auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - last_dl);
-    auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_ol);    
+    auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - p_last_dl);
+    auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::milliseconds>(now - p_last_ol);    
 
     if(time_elapsed_dl.count() >= speed)
     {
@@ -56,6 +56,4 @@ void Aircon::airflow(sf::RenderWindow& p_window, auto p_last_dl, auto last_ol){
     offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
     {return abs(offshoot_line.velocity.x) < 0.1f && abs(offshoot_line.velocity.y) < 0.1f;}),
     offshoot_lines.end());
-    //just copy accross how the dots are spawining with the airflow class in main and it should work if you then let this class handle the logic
-
 }
