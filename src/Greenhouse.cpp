@@ -1,8 +1,14 @@
 #include "Greenhouse.hpp"
 #include <iostream>
-#include "Airflow.hpp"
 
-Greenhouse::Greenhouse() {
+
+Greenhouse::Greenhouse() 
+: aircon1({1106, 164}, {-1.f, 0.f}, 8.f),
+  aircon2({400.f, 350.f}, {-1.f, 0.f}, 5.f),
+  last_dl(std::chrono::steady_clock::now()),
+  last_ol(std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000)))
+
+{
     background.setSize(sf::Vector2f(1400, 500));
     greenhouse.setSize(sf::Vector2f(800, 300));
     upper_air_intake.setSize(sf::Vector2f(50,50));
@@ -44,11 +50,13 @@ Greenhouse::Greenhouse() {
     }
 }
 
-void Greenhouse::update(float dt) {
+void Greenhouse::update(sf::RenderWindow& window) {
     // will be used later for updating the greenhouse with weather patterns
 }
 
 void Greenhouse::draw(sf::RenderWindow& window) {
+    aircon1.airflow(window,last_dl,last_ol);
+    aircon2.airflow(window, last_dl, last_ol);
     window.draw(background);
     window.draw(greenhouse);
     for (auto& plant : plants)
