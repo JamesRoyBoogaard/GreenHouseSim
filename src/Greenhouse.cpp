@@ -7,7 +7,6 @@ Greenhouse::Greenhouse()
   aircon2({900.f, 100.f}, {-1.f, 0.f}, 5.f),
   last_dl(std::chrono::steady_clock::now()),
   last_ol(std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000)))
-
 {
     background.setSize(sf::Vector2f(1400, 500));
     greenhouse.setSize(sf::Vector2f(800, 300));

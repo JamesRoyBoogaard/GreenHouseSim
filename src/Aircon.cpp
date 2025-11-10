@@ -8,7 +8,7 @@ Aircon::Aircon(sf::Vector2f position,
     : aircon_box({50.f, 50.f})           
 {
     aircon_box.setPosition(position);
-    aircon_box.setFillColor(sf::Color::Blue);
+    aircon_box.setFillColor({128, 128, 128});
     intake = position;
     direction = p_direction;
     speed = p_speed;
