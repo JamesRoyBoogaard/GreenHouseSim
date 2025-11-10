@@ -12,6 +12,7 @@ class Airflow {
         sf::CircleShape Create_Directional_Line(sf::Vector2f initial_position, sf::RenderWindow& window);
         void Move_Directional_Line(sf::Vector2f dir, sf::CircleShape& directional_dot, sf::RenderWindow& window);
         float Decay_Method(float initial_velocity, sf::CircleShape& directional_dot, sf::RenderWindow& window);
+
         
         struct Line
         {
@@ -21,55 +22,18 @@ class Airflow {
             float rate_of_slowing = 0.99f;
         };
 
-        struct Directional_line: public Line
-        {
-            std::vector<sf::Vertex> trail;   
-            std::chrono::steady_clock::time_point initial_time;     
-
-            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)//add param for initial velocity from the aircon
-            {
-                Line::dot.setRadius(2.f);
-                Line::dot.setFillColor(sf::Color::Black);
-                Line::dot.setPosition(initial_position);
-                Line::position = initial_position;
-                Line::velocity = p_velocity;// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
-                trail.emplace_back(initial_position, sf::Color::Black);
-                initial_time = std::chrono::steady_clock::now();
-            }
-
-            void Move(sf::RenderWindow& window)
-            {
-                auto current_time = std::chrono::steady_clock::now();
-                auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
-
-                if(elapsed.count()>=10){
-                    dot.move(Line::velocity*=rate_of_slowing);
-                    sf::Vector2f position = dot.getPosition();
-                    initial_time = std::chrono::steady_clock::now();
-                    trail.emplace_back(position, sf::Color::Black);
-                }
-
-                if(trail.size()>=20){
-                    trail.erase(trail.begin());
-                }
-                 
-                window.draw(trail.data(),trail.size(), sf::PrimitiveType::LineStrip);
-                window.draw(dot);
-            }
-        };
-
-        struct Offshoot_line: public Line
+                struct Offshoot_line: public Line
         { 
             float tightness_of_curve;
             std::vector<sf::Vector2f> trail;
 
-            Offshoot_line(Directional_line dl, sf::RenderWindow& window, float y_offset){
+            Offshoot_line(sf::Vector2f position, sf::Vector2f velocity, float y_offset){
                 float tightness_of_curve = 4.f;
                 Line::dot.setRadius(2.f);
-                auto& position = dl.dot.getPosition();
+                auto& position = position;
                 Line::dot.setPosition(position);
                 Line::dot.setFillColor(sf::Color::Green);
-                Line::velocity = {dl.velocity.x , dl.velocity.y + y_offset};
+                Line::velocity = {velocity.x , velocity.y + y_offset};
                 trail.push_back(position);
             }
 
@@ -90,7 +54,58 @@ class Airflow {
             }
         };
 
+        struct Directional_line: public Line
+        {
+            std::vector<sf::Vertex> trail;   
+            std::chrono::steady_clock::time_point initial_time;  
+            std::chrono::steady_clock::time_point last_offshoot;
+            std::vector<Airflow::Offshoot_line> offshoot_lines;
+
+            
+
+            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)//add param for initial velocity from the aircon
+            {
+                Line::dot.setRadius(2.f);
+                Line::dot.setFillColor(sf::Color::Black);
+                Line::dot.setPosition(initial_position);
+                Line::position = initial_position;
+                Line::velocity = p_velocity;// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
+                trail.emplace_back(initial_position, sf::Color::Black);
+                initial_time = std::chrono::steady_clock::now();
+                last_offshoot = initial_time;
+            }
+
+            void Move(sf::RenderWindow& window)
+            {
+
+                auto current_time = std::chrono::steady_clock::now();
+                auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
+                auto ol_elapsted = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_offshoot);
+
+                if(elapsed.count()>=10){
+                    dot.move(Line::velocity*=rate_of_slowing);
+                    sf::Vector2f position = dot.getPosition();
+                    initial_time = std::chrono::steady_clock::now();
+                    trail.emplace_back(position, sf::Color::Black);
+                }
+                if(trail.size()>=20){
+                    trail.erase(trail.begin());
+                }
+                if(ol_elapsted.count()>=250){
+                    offshoot_lines.emplace_back(position,velocity,30);
+                    offshoot_lines.emplace_back(position, velocity,-30);
+                    last_offshoot = std::chrono::steady_clock::now();
+                }
+                 
+                window.draw(trail.data(),trail.size(), sf::PrimitiveType::LineStrip);
+                window.draw(dot);
+            }
+        };
+
+
+
     private:
+
     
 
 

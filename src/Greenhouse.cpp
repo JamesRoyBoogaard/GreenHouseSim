@@ -55,8 +55,8 @@ void Greenhouse::update(sf::RenderWindow& window) {
 }
 
 void Greenhouse::draw(sf::RenderWindow& window) {
-    aircon1.airflow(window,last_dl,last_ol);
-    aircon2.airflow(window, last_dl, last_ol);
+    aircon1.airflow(window);
+    aircon2.airflow(window);
     window.draw(background);
     window.draw(greenhouse);
     for (auto& plant : plants)

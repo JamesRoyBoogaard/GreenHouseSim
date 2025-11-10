@@ -12,6 +12,9 @@ Aircon::Aircon(sf::Vector2f position,
     speed = p_speed;
     outake = position;
     offset_intake = intake;//come up with better way to use the speed to determine how far the offset is
+    // direct line (dl) which contians a time last that it offshot an offshoot line (ol)
+    // Time for that specific aircon which says last time it shot off a direct line (dl)
+    
 }
 
 void Aircon::draw(){
@@ -19,31 +22,22 @@ void Aircon::draw(){
     
 };
 
-void Aircon::airflow(sf::RenderWindow& p_window, auto p_last_dl, auto p_last_ol){
+void Aircon::airflow(sf::RenderWindow& p_window){
     // work out direction and then add speed to the 2dvector direction to form the velocity 
     
     bool line_produced = false;
     sf::Vector2f velocity = {direction.x*speed, direction.y*speed};
 
-    auto now = std::chrono::steady_clock::now();
-    auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - p_last_dl);
-    auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::milliseconds>(now - p_last_ol);    
+    // auto now = std::chrono::steady_clock::now();
+    // auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - p_last_dl);
+    // auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::milliseconds>(now - p_last_ol);    
 
-    if(time_elapsed_dl.count() >= speed)
-    {
-        lines.emplace_back(intake,p_window,velocity); 
-        last_dl = now;
-    }
+    // if(time_elapsed_dl.count() >= speed)
+    // {
+    //     lines.emplace_back(intake,p_window,velocity); 
+    //     last_dl = now;
+    // }
 
-    for(auto& line: lines)
-    {
-        line.Move(p_window);
-        if(time_elapsed_ol.count() >= 250){
-            offshoot_lines.emplace_back(line,p_window,30);
-            offshoot_lines.emplace_back(line, p_window,-30);
-            last_ol = now;
-        }
-    }
     for(auto& offshoot_line: offshoot_lines)
     {
         offshoot_line.Move_Spiral(p_window);
