@@ -8,7 +8,7 @@ class Aircon{
 
     public:
     Aircon(sf::Vector2f position, sf::Vector2f p_direction, float p_speed);
-    void draw();
+    void draw(sf::RenderWindow& p_window);
     void airflow(sf::RenderWindow& p_window);
 
     private:

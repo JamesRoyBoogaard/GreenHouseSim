@@ -17,9 +17,8 @@ Aircon::Aircon(sf::Vector2f position,
     last_directional_line = std::chrono::steady_clock::now();
 }
 
-void Aircon::draw(){
-
-    
+void Aircon::draw(sf::RenderWindow& p_window){
+    p_window.draw(aircon_box);
 };
 
 void Aircon::airflow(sf::RenderWindow& p_window){

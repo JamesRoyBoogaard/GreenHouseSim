@@ -3,8 +3,8 @@
 
 
 Greenhouse::Greenhouse() 
-: aircon1({1106, 164}, {-1.f, 0.f}, 8.f),
-  aircon2({400.f, 350.f}, {-1.f, 0.f}, 5.f),
+: aircon1({900.f, 164}, {-1.f, 0.f}, 8.f),
+  aircon2({900.f, 100.f}, {-1.f, 0.f}, 5.f),
   last_dl(std::chrono::steady_clock::now()),
   last_ol(std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000)))
 
@@ -59,6 +59,8 @@ void Greenhouse::draw(sf::RenderWindow& window) {
     aircon2.airflow(window);
     window.draw(background);
     window.draw(greenhouse);
+    aircon1.draw(window);
+    aircon2.draw(window);
     for (auto& plant : plants)
         window.draw(plant);
     window.draw(upper_air_intake);
