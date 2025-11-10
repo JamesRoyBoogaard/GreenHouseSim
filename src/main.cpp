@@ -33,32 +33,6 @@ int main()
 
         window.clear();
         greenhouse.draw(window);
-        if(time_elapsed_dl.count() >= 3){
-            lines.emplace_back(intake,window,velocity); 
-            last_dl = now;
-        }
-
-        for(auto& line: lines){
-            line.Move(window);
-            if(time_elapsed_ol.count() >= 250){
-                offshoot_lines.emplace_back(line,window,30);
-                offshoot_lines.emplace_back(line, window,-30);
-                last_ol = now;
-            }
-        }
-
-        for(auto& offshoot_line: offshoot_lines){
-            offshoot_line.Move_Spiral(window);
-        }
-
-        lines.erase(std::remove_if(lines.begin(),lines.end(), [](auto& line) 
-            {return abs(line.velocity.x) < 0.1f && abs(line.velocity.y) < 0.1f;})
-            ,lines.end());
-
-        offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
-        {return abs(offshoot_line.velocity.x) < 0.1f && abs(offshoot_line.velocity.y) < 0.1f;}),
-        offshoot_lines.end());
-
         window.display();
     }
 

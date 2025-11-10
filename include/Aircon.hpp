@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Airflow.hpp"
 #include <SFML/Graphics.hpp>
-#include "Greenhouse.hpp"
+// #include "Greenhouse.hpp"
 
 class Aircon{
 
@@ -18,8 +18,9 @@ class Aircon{
     sf::Vector2f intake;
     sf::Vector2f outake;
     sf::Vector2f offset_intake;
-    std::vector<Airflow::Directional_line> lines;
+    std::vector<Airflow::Directional_line> directional_lines;
     std::vector<Airflow::Offshoot_line> offshoot_lines;
+    std::chrono::steady_clock::time_point last_directional_line;
     
 
 };

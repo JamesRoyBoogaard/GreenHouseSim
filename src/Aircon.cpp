@@ -1,5 +1,7 @@
 #include "Aircon.hpp"
 
+
+
 Aircon::Aircon(sf::Vector2f position,
                sf::Vector2f p_direction,
                float p_speed)
@@ -12,9 +14,7 @@ Aircon::Aircon(sf::Vector2f position,
     speed = p_speed;
     outake = position;
     offset_intake = intake;//come up with better way to use the speed to determine how far the offset is
-    // direct line (dl) which contians a time last that it offshot an offshoot line (ol)
-    // Time for that specific aircon which says last time it shot off a direct line (dl)
-    
+    last_directional_line = std::chrono::steady_clock::now();
 }
 
 void Aircon::draw(){
@@ -27,25 +27,27 @@ void Aircon::airflow(sf::RenderWindow& p_window){
     
     bool line_produced = false;
     sf::Vector2f velocity = {direction.x*speed, direction.y*speed};
+    
 
-    // auto now = std::chrono::steady_clock::now();
-    // auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - p_last_dl);
-    // auto time_elapsed_ol = std::chrono::duration_cast<std::chrono::milliseconds>(now - p_last_ol);    
+    auto now = std::chrono::steady_clock::now();
+    auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - last_directional_line);
 
-    // if(time_elapsed_dl.count() >= speed)
-    // {
-    //     lines.emplace_back(intake,p_window,velocity); 
-    //     last_dl = now;
-    // }
-
-    for(auto& offshoot_line: offshoot_lines)
+    if(time_elapsed_dl.count() >= speed)
     {
-        offshoot_line.Move_Spiral(p_window);
+        directional_lines.emplace_back(intake,p_window,velocity); 
+        last_directional_line = now;
     }
 
-    lines.erase(std::remove_if(lines.begin(),lines.end(), [](auto& line) 
+    for (Airflow::Directional_line dl: directional_lines){
+        dl.Move(p_window);
+        for(Airflow::Offshoot_line ol: dl.offshoot_lines){
+            ol.Move_Spiral(p_window);
+        }
+    }
+
+    directional_lines.erase(std::remove_if(directional_lines.begin(),directional_lines.end(), [](auto& line) 
     {return abs(line.velocity.x) < 0.1f && abs(line.velocity.y) < 0.1f;})
-    ,lines.end());
+    ,directional_lines.end());
 
     offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
     {return abs(offshoot_line.velocity.x) < 0.1f && abs(offshoot_line.velocity.y) < 0.1f;}),

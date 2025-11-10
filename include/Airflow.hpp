@@ -22,15 +22,15 @@ class Airflow {
             float rate_of_slowing = 0.99f;
         };
 
-                struct Offshoot_line: public Line
+        struct Offshoot_line: public Line
         { 
             float tightness_of_curve;
             std::vector<sf::Vector2f> trail;
 
-            Offshoot_line(sf::Vector2f position, sf::Vector2f velocity, float y_offset){
+            Offshoot_line(sf::Vector2f p_position, sf::Vector2f velocity, float y_offset){
                 float tightness_of_curve = 4.f;
                 Line::dot.setRadius(2.f);
-                auto& position = position;
+                auto position = p_position;
                 Line::dot.setPosition(position);
                 Line::dot.setFillColor(sf::Color::Green);
                 Line::velocity = {velocity.x , velocity.y + y_offset};
@@ -63,13 +63,13 @@ class Airflow {
 
             
 
-            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)//add param for initial velocity from the aircon
+            Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)
             {
                 Line::dot.setRadius(2.f);
                 Line::dot.setFillColor(sf::Color::Black);
                 Line::dot.setPosition(initial_position);
                 Line::position = initial_position;
-                Line::velocity = p_velocity;// This will later be culculated based off the aircon the partcle was produced from and the dir it points.
+                Line::velocity = p_velocity;
                 trail.emplace_back(initial_position, sf::Color::Black);
                 initial_time = std::chrono::steady_clock::now();
                 last_offshoot = initial_time;
