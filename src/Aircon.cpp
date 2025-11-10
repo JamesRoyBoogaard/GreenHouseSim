@@ -1,7 +1,5 @@
 #include "Aircon.hpp"
 
-
-
 Aircon::Aircon(sf::Vector2f position,
                sf::Vector2f p_direction,
                float p_speed)
@@ -19,15 +17,19 @@ Aircon::Aircon(sf::Vector2f position,
 
 void Aircon::draw(sf::RenderWindow& p_window){
     p_window.draw(aircon_box);
+    for(Airflow::Directional_line dl :directional_lines){
+        dl.Move(p_window);
+        for(Airflow::Offshoot_line ol : dl.offshoot_lines){
+            ol.Move_Spiral(p_window);
+        }
+    }
 };
 
 void Aircon::airflow(sf::RenderWindow& p_window){
     // work out direction and then add speed to the 2dvector direction to form the velocity 
     
-    bool line_produced = false;
     sf::Vector2f velocity = {direction.x*speed, direction.y*speed};
     
-
     auto now = std::chrono::steady_clock::now();
     auto time_elapsed_dl = std::chrono::duration_cast<std::chrono::seconds>(now - last_directional_line);
 
