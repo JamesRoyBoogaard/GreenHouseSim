@@ -2,12 +2,13 @@
 #include <iostream>
 #include "Airflow.hpp"
 #include <SFML/Graphics.hpp>
+#include <string>
 // #include "Greenhouse.hpp"
 
 class Aircon{
 
     public:
-    Aircon(sf::Vector2f position, sf::Vector2f p_direction, float p_speed);
+    Aircon(int id, sf::Vector2f position, sf::Vector2f p_direction, float p_speed);
     void draw(sf::RenderWindow& p_window);
     void airflow(sf::RenderWindow& p_window);
 
@@ -21,6 +22,8 @@ class Aircon{
     std::vector<Airflow::Directional_line> directional_lines;
     std::vector<Airflow::Offshoot_line> offshoot_lines;
     std::chrono::steady_clock::time_point last_directional_line;
+
+    int id;
     
 
 };

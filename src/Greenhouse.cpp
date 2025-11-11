@@ -3,14 +3,13 @@
 
 
 Greenhouse::Greenhouse() 
-: aircon1({900.f, 164}, {-1.f, 0.f}, 8.f),
-  aircon2({900.f, 100.f}, {-1.f, 0.f}, 5.f),
+: aircon1(1,{900.f, 164}, {-1.f, 0.f}, 1.f),
+  aircon2(2,{900.f, 100.f}, {-1.f, 0.f}, 2.f),
   last_dl(std::chrono::steady_clock::now()),
   last_ol(std::chrono::steady_clock::now().operator+=(std::chrono::steady_clock::duration(1000)))
 {
     background.setSize(sf::Vector2f(1400, 500));
     greenhouse.setSize(sf::Vector2f(800, 300));
-    upper_air_intake.setSize(sf::Vector2f(50,50));
 
 
     if (!grassTexture.loadFromFile("../Textures/grass.png", sf::IntRect(0, 0, 1400, 850))) {
@@ -27,10 +26,6 @@ Greenhouse::Greenhouse()
     greenhouse.setOutlineThickness(10.f);
     greenhouse.setOutlineColor(sf::Color(200, 200, 200));
     greenhouse.setPosition(300.f, 110.f);
-
-    upper_air_intake.setPosition(sf::Vector2f(1106, 164));
-    upper_air_intake.setFillColor(sf::Color(245, 245, 220));
-
 
     float top_row[2] = {385.f, 188.f};
     float bottom_row[2] = {435.f, 288.f};
@@ -50,17 +45,16 @@ Greenhouse::Greenhouse()
 }
 
 void Greenhouse::update(sf::RenderWindow& window) {
-    // will be used later for updating the greenhouse with weather patterns
+    aircon1.airflow(window);
+    aircon2.airflow(window);
 }
 
 void Greenhouse::draw(sf::RenderWindow& window) {
-    aircon1.airflow(window);
-    aircon2.airflow(window);
+    
     window.draw(background);
     window.draw(greenhouse);
     aircon1.draw(window);
     aircon2.draw(window);
     for (auto& plant : plants)
         window.draw(plant);
-    window.draw(upper_air_intake);
 }

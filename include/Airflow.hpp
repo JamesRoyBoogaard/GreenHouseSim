@@ -38,7 +38,7 @@ class Airflow {
             }
 
             void Move_Spiral(sf::RenderWindow& window){
-                dot.move(Line::velocity*=rate_of_slowing);
+                dot.setPosition(velocity*=rate_of_slowing);
                 sf::Vector2f position = dot.getPosition();
                 trail.push_back(position);
                 std::vector<sf::Vertex> vert;
@@ -61,8 +61,6 @@ class Airflow {
             std::chrono::steady_clock::time_point last_offshoot;
             std::vector<Airflow::Offshoot_line> offshoot_lines;
 
-            
-
             Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)
             {
                 Line::dot.setRadius(2.f);
@@ -82,11 +80,13 @@ class Airflow {
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
                 auto ol_elapsted = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_offshoot);
 
+                //Over here we are trying to move the dot a certain amount each time 10 milliseconds elapses XXX
+                //Additionally the direction that the dots bo should not be diagonal as it currently is XXX
                 if(elapsed.count()>=10){
-                    dot.move(Line::velocity*=rate_of_slowing);
+                    dot.setPosition(velocity*=rate_of_slowing);
                     sf::Vector2f position = dot.getPosition();
-                    initial_time = std::chrono::steady_clock::now();
                     trail.emplace_back(position, sf::Color::Black);
+                    initial_time = current_time;
                 }
                 if(trail.size()>=20){
                     trail.erase(trail.begin());
