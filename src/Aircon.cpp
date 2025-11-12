@@ -41,9 +41,9 @@ void Aircon::airflow(sf::RenderWindow& p_window){
         last_directional_line = now;
     }
 
-    for(Airflow::Directional_line dl :directional_lines){
+    for(auto& dl :directional_lines){
         dl.Move(p_window);
-        for(Airflow::Offshoot_line ol : dl.offshoot_lines){
+        for(auto& ol : dl.offshoot_lines){
             ol.Move_Spiral(p_window);
         }
     }
