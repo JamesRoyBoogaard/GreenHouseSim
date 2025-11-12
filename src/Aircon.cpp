@@ -10,7 +10,7 @@ Aircon::Aircon(int p_id, sf::Vector2f position,
     intake = position;
     direction = p_direction;
     speed = p_speed;
-    outake = position;
+    outake = {abs(position.x)+ aircon_box.getSize().x/2,abs(position.y)+aircon_box.getSize().y/2} ;
     offset_intake = intake;//come up with better way to use the speed to determine how far the offset is
     last_directional_line = std::chrono::steady_clock::now();
     id = p_id;
@@ -35,7 +35,7 @@ void Aircon::airflow(sf::RenderWindow& p_window){
 
     if(time_elapsed_dl.count() >= speed)
     {
-        directional_lines.emplace_back(intake,p_window,velocity); 
+        directional_lines.emplace_back(outake,p_window,velocity); 
         last_directional_line = now;
     }
 

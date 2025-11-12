@@ -93,8 +93,6 @@ class Airflow {
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
                 auto ol_elapsted = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_offshoot);
 
-                //Over here we are trying to move the dot a certain amount each time 10 milliseconds elapses XXX
-                //Additionally the direction that the dots bo should not be diagonal as it currently is XXX
                 if(elapsed.count()>=10){
                     dot.move(velocity);
                     velocity.x *= rate_of_slowing;  // decay after move
