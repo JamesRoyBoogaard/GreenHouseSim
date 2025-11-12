@@ -35,8 +35,6 @@ void Aircon::airflow(sf::RenderWindow& p_window){
 
     if(time_elapsed_dl.count() >= speed)
     {
-        std::cout << "now: " << id << " " << std::chrono::duration_cast<std::chrono::seconds>(last_directional_line.time_since_epoch()).count()<<"\n";
-        std::cout << "directional line: "<< id << " " << std::chrono::duration_cast<std::chrono::seconds>(last_directional_line.time_since_epoch()).count()<<"\n";
         directional_lines.emplace_back(intake,p_window,velocity); 
         last_directional_line = now;
     }

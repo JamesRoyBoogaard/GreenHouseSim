@@ -13,7 +13,10 @@ class Airflow {
         void Move_Directional_Line(sf::Vector2f dir, sf::CircleShape& directional_dot, sf::RenderWindow& window);
         float Decay_Method(float initial_velocity, sf::CircleShape& directional_dot, sf::RenderWindow& window);
 
-        
+        struct Line;
+        struct Directional_line;
+        struct Offshoot_line;
+
         struct Line
         {
             sf::Vector2f velocity ;
@@ -29,16 +32,15 @@ class Airflow {
             float tightness_of_curve;
             std::vector<sf::Vector2f> trail;
 
-            Offshoot_line(sf::Vector2f p_position, sf::Vector2f velocity, float y_offset){
+            Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, float y_offset){
                 float tightness_of_curve = 4.f;
-                Line::dot.setRadius(2.f);
+                dot.setRadius(2.f);
                 auto position = p_position;
-                Line::dot.setPosition(position);
-                Line::dot.setFillColor(sf::Color::Green);
-                Line::velocity = {velocity.x , velocity.y + y_offset};
+                dot.setPosition(position);
+                dot.setFillColor(sf::Color::Green);
+                velocity = {p_velocity.x , p_velocity.y + y_offset};
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
-
             }
 
             void Move_Spiral(sf::RenderWindow& window){
@@ -54,7 +56,7 @@ class Airflow {
                 
                 std::vector<sf::Vertex> vert;
                 for (auto& p: trail){
-                    if(trail.size()<=1000){
+                    if(trail.size()<=10){
                         vert.push_back(sf::Vertex(p,sf::Color::Green));
                     }else{
                         trail.erase(trail.begin());
@@ -74,11 +76,11 @@ class Airflow {
 
             Directional_line(sf::Vector2f initial_position,sf::RenderWindow& window, sf::Vector2f p_velocity)
             {
-                Line::dot.setRadius(2.f);
-                Line::dot.setFillColor(sf::Color::Black);
-                Line::dot.setPosition(initial_position);
-                Line::position = initial_position;
-                Line::velocity = p_velocity;
+                dot.setRadius(2.f);
+                dot.setFillColor(sf::Color::Black);
+                dot.setPosition(initial_position);
+                position = initial_position;
+                velocity = p_velocity;
                 trail.emplace_back(initial_position, sf::Color::Black);
                 initial_time = std::chrono::steady_clock::now();
                 last_offshoot = initial_time;
@@ -105,8 +107,8 @@ class Airflow {
                     trail.erase(trail.begin());
                 }
                 if(ol_elapsted.count()>=500){
-                    offshoot_lines.emplace_back(position,velocity,30);
-                    offshoot_lines.emplace_back(position, velocity,-30);
+                    offshoot_lines.emplace_back(dot.getPosition(),velocity,30);
+                    offshoot_lines.emplace_back(dot.getPosition(), velocity,-30);
                     last_offshoot = std::chrono::steady_clock::now();
                 }
                 window.draw(trail.data(),trail.size(), sf::PrimitiveType::LineStrip);
