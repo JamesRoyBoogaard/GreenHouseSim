@@ -24,6 +24,8 @@ class Airflow {
 
         struct Offshoot_line: public Line
         { 
+            std::chrono::steady_clock::time_point initial_time;  
+
             float tightness_of_curve;
             std::vector<sf::Vector2f> trail;
 
@@ -35,12 +37,21 @@ class Airflow {
                 Line::dot.setFillColor(sf::Color::Green);
                 Line::velocity = {velocity.x , velocity.y + y_offset};
                 trail.push_back(position);
+                initial_time = std::chrono::steady_clock::now();
+
             }
 
             void Move_Spiral(sf::RenderWindow& window){
-                dot.move(velocity*=rate_of_slowing);
-                sf::Vector2f position = dot.getPosition();
-                trail.push_back(position);
+                auto current_time = std::chrono::steady_clock::now();
+                auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
+                if(elapsed.count()>=10){
+                    dot.move(velocity);
+                    velocity*=rate_of_slowing;
+                    sf::Vector2f position = dot.getPosition();
+                    trail.push_back(position);
+                    initial_time = current_time;
+                }
+                
                 std::vector<sf::Vertex> vert;
                 for (auto& p: trail){
                     if(trail.size()<=1000){
@@ -93,7 +104,7 @@ class Airflow {
                 if(trail.size()>=20){
                     trail.erase(trail.begin());
                 }
-                if(ol_elapsted.count()>=250){
+                if(ol_elapsted.count()>=500){
                     offshoot_lines.emplace_back(position,velocity,30);
                     offshoot_lines.emplace_back(position, velocity,-30);
                     last_offshoot = std::chrono::steady_clock::now();
