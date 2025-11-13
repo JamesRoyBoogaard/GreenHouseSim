@@ -32,17 +32,20 @@ class Airflow {
             float tightness_of_curve;
             sf::Vector2f dl_velocity;
             sf::Vector2f centre;
+            sf::Vector2f offset;
             std::vector<sf::Vector2f> trail;
+            sf::Vector2f position;
 
             Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, float y_offset){
                 float tightness_of_curve = 4.f;
                 dot.setRadius(2.f);
-                auto position = p_position;
+                position = p_position;
                 dot.setPosition(position);
                 dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y + y_offset};
                 centre = {position.x+30,position.y+30};
+                offset = centre;
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
             }
@@ -56,9 +59,11 @@ class Airflow {
                     // R = (Position + DL.Velocity) - DL.Velocity.Theta
                     // Now that there is a centre based off an offset of the initial spawn position, we need to incrementally work our dot towards said center
                     // at an angle.
-                    
-                    dot.move((velocity.x) - tightness_of_curve*cos(60),(velocity.y) - tightness_of_curve*cos(60));
-                    dl_velocity -= 
+                    dot.move(velocity);
+                    velocity.x = velocity.x+ offset.x - tightness_of_curve*cos(2);
+                    velocity.y = velocity.y+offset.y - tightness_of_curve*cos(2);
+                    offset.x=-0.001;
+                    offset.y=-0.001;
                     velocity*=rate_of_slowing;
                     sf::Vector2f position = dot.getPosition();
                     trail.push_back(position);
