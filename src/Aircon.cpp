@@ -23,9 +23,6 @@ void Aircon::draw(sf::RenderWindow& p_window){
     {return abs(line.velocity.x) < 0.1f && abs(line.velocity.y) < 0.1f;})
     ,directional_lines.end());
 
-    offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
-    {return abs(offshoot_line.velocity.x) < 0.1f && abs(offshoot_line.velocity.y) < 0.1f;}),
-    offshoot_lines.end());
 };
 
 void Aircon::airflow(sf::RenderWindow& p_window){

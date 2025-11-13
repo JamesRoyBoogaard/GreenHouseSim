@@ -3,7 +3,7 @@
 #include <array>
 #include <iostream>
 #include <chrono>
-
+#include <cmath>
 
 class Airflow {
     public:
@@ -30,6 +30,8 @@ class Airflow {
             std::chrono::steady_clock::time_point initial_time;  
 
             float tightness_of_curve;
+            sf::Vector2f dl_velocity;
+            sf::Vector2f centre;
             std::vector<sf::Vector2f> trail;
 
             Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, float y_offset){
@@ -37,8 +39,10 @@ class Airflow {
                 dot.setRadius(2.f);
                 auto position = p_position;
                 dot.setPosition(position);
+                dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y + y_offset};
+                centre = {position.x+30,position.y+30};
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
             }
@@ -47,7 +51,14 @@ class Airflow {
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
                 if(elapsed.count()>=10){
-                    dot.move(velocity);
+                    //dot.move(velocity);
+                    //Here we must apply a movement formula 
+                    // R = (Position + DL.Velocity) - DL.Velocity.Theta
+                    // Now that there is a centre based off an offset of the initial spawn position, we need to incrementally work our dot towards said center
+                    // at an angle.
+                    
+                    dot.move((velocity.x) - tightness_of_curve*cos(60),(velocity.y) - tightness_of_curve*cos(60));
+                    dl_velocity -= 
                     velocity*=rate_of_slowing;
                     sf::Vector2f position = dot.getPosition();
                     trail.push_back(position);
@@ -62,6 +73,7 @@ class Airflow {
                         trail.erase(trail.begin());
                 }
             }
+            
             window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
             window.draw(dot);
             }
@@ -109,6 +121,10 @@ class Airflow {
                     offshoot_lines.emplace_back(dot.getPosition(), velocity,-30);
                     last_offshoot = std::chrono::steady_clock::now();
                 }
+                offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
+                {return abs(offshoot_line.velocity.x) < 0.1f && abs(offshoot_line.velocity.y) < 0.1f;}),
+                offshoot_lines.end());
+
                 window.draw(trail.data(),trail.size(), sf::PrimitiveType::LineStrip);
                 window.draw(dot);
             }
