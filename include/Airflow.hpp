@@ -68,7 +68,6 @@ class Airflow {
                 auto diff = [](float a1, float a2, float b1, float b2){
                     float a = fabs(a1 - a2);
                     float b = fabs(b1 - b2);
-                    
                     // float result;
                     // if(a != 0){
                     //     result = a;
@@ -81,6 +80,8 @@ class Airflow {
 
                 float AC = diff(point_A.x, point_C.x, point_A.y , point_C.y);
                 float BC = diff(point_B.x, point_C.x, point_B.y , point_C.y);
+
+                return AC+BC;
                 
             }
 
