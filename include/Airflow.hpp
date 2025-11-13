@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <cmath>
+#include <numbers>
 
 class Airflow {
     public:
@@ -23,6 +24,7 @@ class Airflow {
             sf::CircleShape dot;
             sf::Vector2f position;
             float rate_of_slowing = 0.99f;
+            const double PI = 3.14159265358979323846;
         };
 
         struct Offshoot_line: public Line
@@ -44,7 +46,7 @@ class Airflow {
                 dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y + y_offset};
-                centre = {velocity.x*100,velocity.y*100};
+                centre = {velocity.x+100,velocity.y+100};
                 offset = centre;
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
@@ -91,14 +93,17 @@ class Airflow {
                 if(elapsed.count()>=10){
                     //dot.move(velocity);
                     //Here we must apply a movement formula 
-                    // 1. First establish a mid point that being the center
+                    // 1. First establish a mid point that being the centre
                     // 2. Then From this we shall have our radius with pythag
                     // 3. Then we need to track time with something, like perhaps our elapsed
                     // 4. Then i need to apply the formula for x and y :
                     //          x = radius/2(PI)*cos(elapsed)
                     //          y = radius/2(PI)*sin(elapsed)
-                    
-
+                    // 5. Add all the values to a vector, reverse the order and then make the dot travel those coods 
+                    float radius = Find_Radius(position,centre);
+                    float x = radius/2*(PI)*cos(elapsed.count());
+                    float y = radius/2*(PI)*sin(elapsed.count());
+                    dot.move(x,y);
                     //dot.move(velocity);
                     // velocity.x = velocity.x+ offset.x - tightness_of_curve*cos(2);
                     // velocity.y = velocity.y+offset.y - tightness_of_curve*cos(2);
@@ -116,7 +121,6 @@ class Airflow {
                         trail.erase(trail.begin());
                 }
             }
-            
             window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
             window.draw(dot);
             }
