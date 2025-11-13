@@ -44,26 +44,33 @@ class Airflow {
                 dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y + y_offset};
-                centre = {position.x+30,position.y+30};
+                centre = {velocity.x*100,velocity.y*100};
                 offset = centre;
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
             }
 
+            float Find_Radius(sf::Vector2f& point_1,sf::Vector2f& point_2){
+
+            }
+            
             void Move_Spiral(sf::RenderWindow& window){
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
                 if(elapsed.count()>=10){
                     //dot.move(velocity);
                     //Here we must apply a movement formula 
-                    // R = (Position + DL.Velocity) - DL.Velocity.Theta
-                    // Now that there is a centre based off an offset of the initial spawn position, we need to incrementally work our dot towards said center
-                    // at an angle.
-                    dot.move(velocity);
-                    velocity.x = velocity.x+ offset.x - tightness_of_curve*cos(2);
-                    velocity.y = velocity.y+offset.y - tightness_of_curve*cos(2);
-                    offset.x=-0.001;
-                    offset.y=-0.001;
+                    // 1. First establish a mid point that being the center
+                    // 2. Then From this we shall have our radius with pythag
+                    // 3. Then we need to track time with something, like perhaps our elapsed
+                    // 4. Then i need to apply the formula for x and y :
+                    //          x = radius/2(PI)*cos(elapsed)
+                    //          y = radius/2(PI)*sin(elapsed)
+                    
+
+                    //dot.move(velocity);
+                    // velocity.x = velocity.x+ offset.x - tightness_of_curve*cos(2);
+                    // velocity.y = velocity.y+offset.y - tightness_of_curve*cos(2);
                     velocity*=rate_of_slowing;
                     sf::Vector2f position = dot.getPosition();
                     trail.push_back(position);
