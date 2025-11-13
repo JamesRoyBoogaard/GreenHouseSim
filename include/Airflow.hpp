@@ -58,13 +58,29 @@ class Airflow {
                 }
             }
 
-            float Find_Radius(sf::Vector2f& point_1,sf::Vector2f& point_2){
+            float Find_Radius(sf::Vector2f& point_A,sf::Vector2f& point_B){
                 //Pythag = ab^2 = bc^2 + ac^2
-                sf::Vector2f point_3;
+                sf::Vector2f point_C;
                 // 1. First say who has the smaller x and who has the smallest y to narmalise them.
-                point_3.x = min(point_1.x,point_2.y);
-                point_3.y = min(point_1.y,point_2.y);
+                point_C.x = min(point_A.x,point_B.y);
+                point_C.y = min(point_A.y,point_B.y);
 
+                auto diff = [](float a1, float a2, float b1, float b2){
+                    float a = fabs(a1 - a2);
+                    float b = fabs(b1 - b2);
+                    
+                    // float result;
+                    // if(a != 0){
+                    //     result = a;
+                    // }else{
+                    //     result = b;
+                    // }
+                    // return result;
+                    return a!=0?a:b;
+                };
+
+                float AC = diff(point_A.x, point_C.x, point_A.y , point_C.y);
+                float BC = diff(point_B.x, point_C.x, point_B.y , point_C.y);
                 
             }
 
