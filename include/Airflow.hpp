@@ -50,10 +50,24 @@ class Airflow {
                 initial_time = std::chrono::steady_clock::now();
             }
 
-            float Find_Radius(sf::Vector2f& point_1,sf::Vector2f& point_2){
-
+            float min(float f1, float f2){
+                if(f1>f2){
+                    return f2;
+                }else{
+                    return f1;
+                }
             }
-            
+
+            float Find_Radius(sf::Vector2f& point_1,sf::Vector2f& point_2){
+                //Pythag = ab^2 = bc^2 + ac^2
+                sf::Vector2f point_3;
+                // 1. First say who has the smaller x and who has the smallest y to narmalise them.
+                point_3.x = min(point_1.x,point_2.y);
+                point_3.y = min(point_1.y,point_2.y);
+
+                
+            }
+
             void Move_Spiral(sf::RenderWindow& window){
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
