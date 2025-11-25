@@ -74,10 +74,18 @@ class Airflow {
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
                 float t = elapsed.count(); 
-                if(elapsed.count()>=10){
-              
-                    float x = centre.x + radius * cos(t*0.01f);
-                    float y = centre.y + radius * sin(t*0.01f);
+
+                float angular_speed = .7f;  
+                float angle = t * angular_speed;
+
+                float shrink_rate = 5.f;  
+
+                if(elapsed.count()>=50){
+
+                    float current_radius = std::max(0.f, radius - shrink_rate * t);
+
+                    float x = centre.x + current_radius * cos(angle);
+                    float y = centre.y + current_radius * sin(angle);
 
                     dot.setPosition(x,y);
                     velocity*=rate_of_slowing;
@@ -87,7 +95,7 @@ class Airflow {
                 
                 std::vector<sf::Vertex> vert;
                 for (auto& p: trail){
-                    if(trail.size()<=10){
+                    if(trail.size()<=1000){
                         vert.push_back(sf::Vertex(p,sf::Color::Green));
                     }else{
                         trail.erase(trail.begin());
