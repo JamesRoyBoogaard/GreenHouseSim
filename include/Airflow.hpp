@@ -24,7 +24,7 @@ class Airflow {
             sf::CircleShape dot;
             sf::Vector2f position;
             float rate_of_slowing = 0.99f;
-            const double PI = 3.14159265358979323846;
+            double PI = 3.14159265358979323846;
         };
 
         struct Offshoot_line: public Line
@@ -37,6 +37,7 @@ class Airflow {
             sf::Vector2f offset;
             std::vector<sf::Vector2f> trail;
             sf::Vector2f position;
+            float radius;
 
             Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, float y_offset){
                 float tightness_of_curve = 4.f;
@@ -50,6 +51,8 @@ class Airflow {
                 offset = centre;
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
+                radius = Find_Radius(p_position, centre);
+
             }
 
             float min(float f1, float f2){
@@ -60,57 +63,26 @@ class Airflow {
                 }
             }
 
-            float Find_Radius(sf::Vector2f& point_A,sf::Vector2f& point_B){
-                //Pythag = ab^2 = bc^2 + ac^2
-                sf::Vector2f point_C;
-                // 1. First say who has the smaller x and who has the smallest y to narmalise them.
-                point_C.x = min(point_A.x,point_B.y);
-                point_C.y = min(point_A.y,point_B.y);
-
-                auto diff = [](float a1, float a2, float b1, float b2){
-                    float a = fabs(a1 - a2);
-                    float b = fabs(b1 - b2);
-                    // float result;
-                    // if(a != 0){
-                    //     result = a;
-                    // }else{
-                    //     result = b;
-                    // }
-                    // return result;
-                    return a!=0?a:b;
-                };
-
-                float AC = diff(point_A.x, point_C.x, point_A.y , point_C.y);
-                float BC = diff(point_B.x, point_C.x, point_B.y , point_C.y);
-
-                return AC+BC;
-                
+            float Find_Radius(const sf::Vector2f& A, const sf::Vector2f& B)
+            {
+                float dx = B.x - A.x;
+                float dy = B.y - A.y;
+                return std::sqrt(dx*dx + dy*dy);
             }
 
             void Move_Spiral(sf::RenderWindow& window){
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
+                float t = elapsed.count(); 
                 if(elapsed.count()>=10){
-                    //dot.move(velocity);
-                    //Here we must apply a movement formula 
-                    // 1. First establish a mid point that being the centre
-                    // 2. Then From this we shall have our radius with pythag
-                    // 3. Then we need to track time with something, like perhaps our elapsed
-                    // 4. Then i need to apply the formula for x and y :
-                    //          x = radius/2(PI)*cos(elapsed)
-                    //          y = radius/2(PI)*sin(elapsed)
-                    // 5. Add all the values to a vector, reverse the order and then make the dot travel those coods 
-                    float radius = Find_Radius(position,centre);
-                    float x = radius/2*(PI)*cos(elapsed.count());
-                    float y = radius/2*(PI)*sin(elapsed.count());
-                    dot.move(x,y);
-                    //dot.move(velocity);
-                    // velocity.x = velocity.x+ offset.x - tightness_of_curve*cos(2);
-                    // velocity.y = velocity.y+offset.y - tightness_of_curve*cos(2);
+              
+                    float x = centre.x + radius * cos(t*0.01f);
+                    float y = centre.y + radius * sin(t*0.01f);
+
+                    dot.setPosition(x,y);
                     velocity*=rate_of_slowing;
                     sf::Vector2f position = dot.getPosition();
                     trail.push_back(position);
-                    initial_time = current_time;
                 }
                 
                 std::vector<sf::Vertex> vert;
