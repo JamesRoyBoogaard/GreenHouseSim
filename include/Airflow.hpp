@@ -128,7 +128,7 @@ class Airflow {
 
                 if(elapsed.count()>=10){
                     dot.move(velocity);
-                    velocity.x *= rate_of_slowing;  // decay after move
+                    velocity.x *= rate_of_slowing;  
                     velocity.y *= rate_of_slowing;
                     sf::Vector2f position = dot.getPosition();
                     trail.emplace_back(position, sf::Color::Black);
