@@ -38,6 +38,7 @@ class Airflow {
             std::vector<sf::Vector2f> trail;
             sf::Vector2f position;
             float radius;
+            float iterant;
 
             Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, float y_offset){
                 float tightness_of_curve = 4.f;
@@ -47,12 +48,12 @@ class Airflow {
                 dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y + y_offset};
-                centre = {velocity.x+100,velocity.y+100};
+                centre = {position.x+100,position.y+100};
                 offset = centre;
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
                 radius = Find_Radius(p_position, centre);
-
+                iterant = 0.f;
             }
 
             float min(float f1, float f2){
@@ -70,41 +71,34 @@ class Airflow {
                 return std::sqrt(dx*dx + dy*dy);
             }
 
-            void Move_Spiral(sf::RenderWindow& window){
-                auto current_time = std::chrono::steady_clock::now();
-                auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
-                float t = elapsed.count(); 
+        void Move_Spiral(sf::RenderWindow& window)
+        {
+            auto current_time = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
 
-                float angular_speed = .7f;  
-                float angle = t * angular_speed;
+            if (elapsed.count() >= 10 && iterant <= 1.f) {
+                initial_time = current_time;
 
-                float shrink_rate = 5.f;  
+                float x = position.x + (centre.x - position.x) * iterant;
+                float y = position.y + (centre.y - position.y) * iterant;
 
-                if(elapsed.count()>=50){
+                dot.setPosition(x, y);
+                trail.push_back({x, y});
 
-                    float current_radius = std::max(0.f, radius - shrink_rate * t);
-
-                    float x = centre.x + current_radius * cos(angle);
-                    float y = centre.y + current_radius * sin(angle);
-
-                    dot.setPosition(x,y);
-                    velocity*=rate_of_slowing;
-                    sf::Vector2f position = dot.getPosition();
-                    trail.push_back(position);
-                }
-                
-                std::vector<sf::Vertex> vert;
-                for (auto& p: trail){
-                    if(trail.size()<=1000){
-                        vert.push_back(sf::Vertex(p,sf::Color::Green));
-                    }else{
-                        trail.erase(trail.begin());
-                }
+                iterant += 0.01f;   
             }
-            window.draw(vert.data(), vert.size(), sf::PrimitiveType::LineStrip);
+
+            if (trail.size() > 50)
+                trail.erase(trail.begin());
+
+            std::vector<sf::Vertex> vert;
+            for (auto& p : trail)
+                vert.emplace_back(p, sf::Color::Green);
+
+            window.draw(vert.data(), vert.size(), sf::LineStrip);
             window.draw(dot);
-            }
-        };
+        }
+    };
 
         struct Directional_line: public Line
         {
