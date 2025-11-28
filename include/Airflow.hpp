@@ -48,7 +48,8 @@ class Airflow {
                 dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y + y_offset};
-                centre = {position.x+100,position.y+100};
+
+                centre = {position.x-100,position.y+100};
                 offset = centre;
                 trail.push_back(position);
                 initial_time = std::chrono::steady_clock::now();
