@@ -37,23 +37,27 @@ class Airflow {
             sf::Vector2f offset;
             std::vector<sf::Vector2f> trail;
             sf::Vector2f position;
+            int direction;
             float radius;
             float iterant;
 
-            Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, float y_offset){
+            Offshoot_line(sf::Vector2f p_position, sf::Vector2f p_velocity, int p_is_right_or_left){
                 float tightness_of_curve = 4.f;
                 dot.setRadius(2.f);
                 position = p_position;
                 dot.setPosition(position);
                 dl_velocity = p_velocity;
                 dot.setFillColor(sf::Color::Green);
-                velocity = {p_velocity.x , p_velocity.y + y_offset};
-
-                centre = {position.x-100,position.y+100};
-                offset = centre;
+                velocity = {p_velocity.x , p_velocity.y};
+                direction = p_is_right_or_left;
                 trail.push_back(position);
+                if(direction == 1){
+                    centre = {position.x+100,position.y+ 100};
+                }else{
+                    centre = {position.x+100, position.y-100};
+                }
                 initial_time = std::chrono::steady_clock::now();
-                radius = Find_Radius(p_position, centre);
+
                 iterant = 0.f;
             }
 
@@ -122,7 +126,6 @@ class Airflow {
 
             void Move(sf::RenderWindow& window)
             {
-
                 auto current_time = std::chrono::steady_clock::now();
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - initial_time);
                 auto ol_elapsted = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_offshoot);
@@ -139,8 +142,8 @@ class Airflow {
                     trail.erase(trail.begin());
                 }
                 if(ol_elapsted.count()>=500){
-                    offshoot_lines.emplace_back(dot.getPosition(),velocity,30);
-                    offshoot_lines.emplace_back(dot.getPosition(), velocity,-30);
+                    offshoot_lines.emplace_back(dot.getPosition(),velocity, 1);
+                    offshoot_lines.emplace_back(dot.getPosition(), velocity,-1);
                     last_offshoot = std::chrono::steady_clock::now();
                 }
                 offshoot_lines.erase(std::remove_if(offshoot_lines.begin(),offshoot_lines.end(),[](auto& offshoot_line)
