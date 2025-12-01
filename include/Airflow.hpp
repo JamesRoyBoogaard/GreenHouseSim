@@ -50,16 +50,29 @@ class Airflow {
                 dot.setFillColor(sf::Color::Green);
                 velocity = {p_velocity.x , p_velocity.y};
                 direction = p_is_right_or_left;
+                centre = normalise(p_velocity, position);
                 trail.push_back(position);
-                if(direction == 1){
-                    centre = {position.x+100,position.y+ 100};
-                }else{
-                    centre = {position.x+100, position.y-100};
-                }
                 initial_time = std::chrono::steady_clock::now();
-
                 iterant = 0.f;
             }
+
+            sf::Vector2f normalise(sf::Vector2f& p_velocity, sf::Vector2f& p_position){
+                sf::Vector2f r_centre;
+                if(p_velocity.x!=0){
+                    r_centre.x = p_position.x + p_velocity.x*100;
+                }else{
+                    r_centre.x = p_position.x +100;
+                }
+                if(p_velocity.y!=0){
+                    r_centre.y = p_position.y + p_velocity.y*100;
+                }else{
+                    r_centre.y = p_position.y + 100;
+                }
+                return r_centre;
+            }
+
+            // we can derive the direction from the velocity and the initial position p_postion - p_velocity we will get a +-x and +-y.
+            // then we do a check on this and will make the offsets appropriate 
 
             float min(float f1, float f2){
                 if(f1>f2){
@@ -99,7 +112,6 @@ class Airflow {
             std::vector<sf::Vertex> vert;
             for (auto& p : trail)
                 vert.emplace_back(p, sf::Color::Green);
-
             window.draw(vert.data(), vert.size(), sf::LineStrip);
             window.draw(dot);
         }

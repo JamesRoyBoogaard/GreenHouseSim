@@ -20,8 +20,8 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }   
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
+        // sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        // std::cout << "Mouse: " << mousePos.x << ", " << mousePos.y << "\n";
 
         window.clear();
         greenhouse.draw(window);
